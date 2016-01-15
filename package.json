@@ -1,0 +1,33 @@
+{
+  "name": "schiffeversenken",
+  "version": "1.0.0",
+  "description": "schiffe versenken",
+  "main": "\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[C\u001b[C\u001b[C\u001b[C\u001b[Cmain.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "node_modules/.bin/browserify main.js -t babelify -o bundle.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Flamesolid/Schiffeversenken.git"
+  },
+  "keywords": [
+    "schiffeversenken"
+  ],
+  "author": "Moritz",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Flamesolid/Schiffeversenken/issues"
+  },
+  "homepage": "https://github.com/Flamesolid/Schiffeversenken#readme",
+  "devDependencies": {
+    "babel-preset-es2015": "^6.3.13",
+    "babelify": "^7.2.0",
+    "browserify": "^13.0.0"
+  },
+  "babel": {
+    "presets": [
+      "es2015"
+    ]
+  }
+}
