@@ -20,7 +20,14 @@ tr, td {
 }
 
 table {
+  float: left;
   border-spacing: 0;
+  margin-right: 4em;
+}
+
+.scoreboard td:first-child {
+  width: 50px;
+  border: none;
 }
 
 .treffer {
