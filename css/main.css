@@ -28,7 +28,7 @@ table {
 }
 
 .daneben {
-  background-color: white;
+  background-color: grey;
 }
 
 .schiff {
@@ -37,4 +37,6 @@ table {
 
 .wasser {
   background-color: blue;
+  background: url(../img/wasser.jpg) 0 0;
+
 }
