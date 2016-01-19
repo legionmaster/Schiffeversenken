@@ -11,15 +11,29 @@ var ships = [
   {"name": "u-boot", "position": [82, 83]}
 ]
 
+var shipsKI = [
+  {"name": "schlachtschiff", "position": [15, 16, 17, 18, 19]},
+  {"name": "kreuzer", "position": [34, 35, 36, 37]},
+  {"name": "kreuzer", "position": [76, 77, 78, 79]},
+  {"name": "zerstörer", "position": [0, 1, 2]},
+  {"name": "zerstörer", "position": [91, 92, 93]},
+  {"name": "zerstörer", "position": [51, 52,53 ]},
+  {"name": "u-boot", "position": [63, 64]},
+  {"name": "u-boot", "position": [67, 68]},
+  {"name": "u-boot", "position": [86, 87]},
+  {"name": "u-boot", "position": [82, 83]}
+]
+
 var posArray = [];
 for (var i = 0; i < 100 ; i++) {
   posArray.push(i);
 }
 
-function randomShot(){
-  var index = math.floor(math.rand(posArray.length));
-  updateData(posArray[index]);
+function randomTarget() {
+  var index = Math.floor(Math.random(posArray.length)*100);
+  var target = posArray[index];
   posArray.splice(index,1);
+  return parseInt(target);
 }
 
 function createTable(table, x, y) {
@@ -63,7 +77,7 @@ function render(table, gegner) {
   }
 }
 
-function schiffeerstellen(table) {
+function schiffeerstellen(table,ships) {
   var tds = table.getElementsByTagName("td");
   for (var i = 0; i < ships.length; i++) {
     for (var j = 0; j < ships[i].position.length; j++) {
@@ -80,21 +94,25 @@ function ready(fn) {
   }
 }
 
-function schiessen(event, table, gegner, scoreboardtable) {
-  if(event.target && event.target.nodeName == "TD") {
-    var td = event.target;
-    var dataId = parseInt(td.getAttribute('data-id'));
-    var shotposition = parseInt(td.getAttribute('data-pos'));
-    if (dataId < 2){
-      td.setAttribute('data-id', dataId + 2);
-      render(table, gegner);
-      updateData(shotposition);
-      updateScoreboard(scoreboardtable);
-    }
+
+function updateStatus (dataId) {
+  if (dataId + 2 == 2){
+    var status = document.querySelector(".status h1");
+    status.innerHTML = "Daneben!";
+    status = document.querySelector(".status h2");
+    status.innerHTML = "Nächster Spieler ist an der Reihe!"
+    return false;
+  }
+  if (dataId + 2 == 3){
+    var status = document.querySelector(".status h1");
+    status.innerHTML = "Getroffen!";
+    status = document.querySelector(".status h2");
+    status.innerHTML = "Du bist wieder an der Reihe!"
+    return true;
   }
 }
 
-function updateData(shotposition) {
+function updateData(shotposition, ships) {
   ships.map(function(ship) {
       var newpos = ship.position.filter(function(pos) {
           return pos !== shotposition;
@@ -105,12 +123,14 @@ function updateData(shotposition) {
       if (elem.position.length > 0) {
         return elem;
       }
+      var status = document.querySelector(".status h2");
+      status.innerHTML = "Schiff zerstört!"
   });
   ships = newShips;
 }
 
 
-function updateScoreboard(scoreboardtable) {
+function updateScoreboard(scoreboardtable, ships) {
   var tds = scoreboardtable.querySelectorAll("td:first-child");
   var kreuzercount = 0
   var zerstoerercount = 0
@@ -140,12 +160,29 @@ function updateScoreboard(scoreboardtable) {
   tds[0].querySelector("span").innerHTML= ubootcount;
 }
 
+function computershoot(tablespieler, scoreboardspieler) {
+  setTimeout(function() {
+    var shotposition = randomTarget();
+    var td = tablespieler.querySelector('td[data-pos="' + shotposition + '"]');
+    var dataId = parseInt(td.getAttribute("data-id"));
+    td.setAttribute('data-id', dataId + 2);
+    render(tablespieler, false);
+    updateData(shotposition, ships);
+    updateScoreboard(scoreboardspieler, ships);
+    if (updateStatus(dataId)) {
+      computershoot(tablespieler, scoreboardspieler);
+    }
+  }, 1000);
+
+}
+
 function main(args) {
   createTable(args.tablespieler, 10, 10);
   createTable(args.tablegegner, 10, 10);
-  schiffeerstellen(args.tablespieler);
-  schiffeerstellen(args.tablegegner);
-  updateScoreboard(args.scoreboardgegner);
+  schiffeerstellen(args.tablespieler, ships);
+  schiffeerstellen(args.tablegegner, shipsKI);
+  updateScoreboard(args.scoreboardgegner, shipsKI);
+  updateScoreboard(args.scoreboardspieler, ships);
   render(args.tablespieler, false);
   render(args.tablegegner, true);
 }
@@ -165,6 +202,19 @@ ready(function() {
   //   schiessen(event, tablespieler, false);
   // });
   tablegegner.addEventListener("click", function() {
-    schiessen(event, tablegegner, true, scoreboardgegner);
+    if(event.target && event.target.nodeName == "TD") {
+      var td = event.target;
+      var dataId = parseInt(td.getAttribute('data-id'));
+      var shotposition = parseInt(td.getAttribute('data-pos'));
+      if (dataId < 2){
+        td.setAttribute('data-id', dataId + 2);
+        render(tablegegner, true);
+        updateData(shotposition, shipsKI);
+        updateScoreboard(scoreboardgegner, shipsKI);
+        if (!updateStatus(dataId)) {
+          computershoot(tablespieler, scoreboardspieler);
+        }
+      }
+    }
   });
 });

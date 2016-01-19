@@ -47,3 +47,11 @@ table {
   background: url(../img/wasser.jpg) 0 0;
 
 }
+
+.status {
+  clear:both;
+  position: absolute;
+  left: 300px;
+  top: 250px;
+
+}
