@@ -30,9 +30,9 @@ for (var i = 0; i < 100 ; i++) {
 }
 
 function randomTarget() {
-  var index = Math.floor(Math.random(posArray.length)*100);
+  var index = Math.floor(Math.random() * posArray.length);
   var target = posArray[index];
-  posArray.splice(index,1);
+  posArray.splice(index, 1);
   return parseInt(target);
 }
 
@@ -126,7 +126,7 @@ function updateData(shotposition, ships) {
       var status = document.querySelector(".status h2");
       status.innerHTML = "Schiff zerstört!"
   });
-  ships = newShips;
+  return newShips;
 }
 
 
@@ -167,12 +167,12 @@ function computershoot(tablespieler, scoreboardspieler) {
     var dataId = parseInt(td.getAttribute("data-id"));
     td.setAttribute('data-id', dataId + 2);
     render(tablespieler, false);
-    updateData(shotposition, ships);
+    ships = updateData(shotposition, ships);
     updateScoreboard(scoreboardspieler, ships);
     if (updateStatus(dataId)) {
       computershoot(tablespieler, scoreboardspieler);
     }
-  }, 1000);
+  }, 500);
 
 }
 
@@ -209,7 +209,7 @@ ready(function() {
       if (dataId < 2){
         td.setAttribute('data-id', dataId + 2);
         render(tablegegner, true);
-        updateData(shotposition, shipsKI);
+        shipsKI = updateData(shotposition, shipsKI);
         updateScoreboard(scoreboardgegner, shipsKI);
         if (!updateStatus(dataId)) {
           computershoot(tablespieler, scoreboardspieler);
