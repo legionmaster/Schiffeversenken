@@ -1,14 +1,15 @@
 import {Scoreboard} from './Scoreboard';
 import {Spielfeld} from './Spielfeld';
 import {Statusfeld} from './Statusfeld';
-import {ships, shipsKI} from './Schiff';
+import {Schiff} from './Schiff';
 import {Ki} from './Ki';
 
 var scoreboard = new Scoreboard();
 var spielfeld = new Spielfeld();
-var schiff = new Schiff();
 var statusfeld = new Statusfeld();
-var ki = new Ki(schiff);
+var ki = new Ki();
+var schiffe = new Schiff();
+
 
 function ready(fn) {
   if (document.readyState != 'loading') {
@@ -19,14 +20,14 @@ function ready(fn) {
 }
 
 function main(args) {
-  createTable(args.tablespieler, 10, 10);
-  createTable(args.tablegegner, 10, 10);
-  schiffeerstellen(args.tablespieler, ships);
-  schiffeerstellen(args.tablegegner, shipsKI);
-  updateScoreboard(args.scoreboardgegner, shipsKI);
-  updateScoreboard(args.scoreboardspieler, ships);
-  render(args.tablespieler, false);
-  render(args.tablegegner, true);
+  spielfeld.createTable(args.tablespieler, 10, 10);
+  spielfeld.createTable(args.tablegegner, 10, 10);
+  spielfeld.schiffeerstellen(args.tablespieler, schiffe.ships);
+  spielfeld.schiffeerstellen(args.tablegegner, schiffe.shipsKI);
+  scoreboard.updateScoreboard(args.scoreboardgegner, schiffe.shipsKI);
+  scoreboard.updateScoreboard(args.scoreboardspieler, schiffe.ships);
+  spielfeld.render(args.tablespieler, false);
+  spielfeld.render(args.tablegegner, true);
 }
 
 ready(function() {
@@ -49,11 +50,11 @@ ready(function() {
       var shotposition = parseInt(td.getAttribute('data-pos'));
       if (dataId < 2){
         td.setAttribute('data-id', dataId + 2);
-        render(tablegegner, true);
-        shipsKI = updateData(shotposition, shipsKI);
-        updateScoreboard(scoreboardgegner, shipsKI);
-        if (!updateStatus(dataId)) {
-          computershoot(tablespieler, scoreboardspieler);
+        spielfeld.render(tablegegner, true);
+        schiffe.updateShipsKi(spielfeld.updateData(shotposition, schiffe.shipsKI));
+        scoreboard.updateScoreboard(scoreboardgegner, schiffe.shipsKI);
+        if (!statusfeld.updateStatus(dataId)) {
+          ki.computershoot(tablespieler, scoreboardspieler);
         }
       }
     }
