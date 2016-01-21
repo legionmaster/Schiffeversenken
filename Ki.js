@@ -35,6 +35,6 @@ export class Ki {
       if (statusfeld.updateStatus(dataId)) {
         this.computershoot(tablespieler, scoreboardspieler);
       }
-    }, 500);
+    }.bind(this), 500);
   }
 }
