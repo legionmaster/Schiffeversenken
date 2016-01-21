@@ -27,5 +27,10 @@ export class Scoreboard {
     tds[2].querySelector("span").innerHTML= kreuzercount;
     tds[1].querySelector("span").innerHTML= zerstoerercount;
     tds[0].querySelector("span").innerHTML= ubootcount;
+    var summe = kreuzercount + zerstoerercount + schlachtschiffcount + ubootcount;
+    if(summe == 0) {
+      alert("Spiel vorbei!");
+      window.open("http://localhost:8080", "_self");
+    }
   }
 }
