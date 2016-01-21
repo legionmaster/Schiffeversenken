@@ -33,4 +33,8 @@ export class Schiff {
   updateShipsKi(shipsKI) {
     this.shipsKI = shipsKI;
   }
+
+  test(a, b) {
+    return a + b;
+  }
 }
