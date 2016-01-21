@@ -38,10 +38,11 @@ export class Ki {
       } else {
         target = this.firstHit[this.firstHit.length - 1] - 1;
       }
+      var index = this.posArray.indexOf(target);
       var left = target.toString()[0];
       var right = (target + 1).toString()[0];
       // Hier wird die Richtung geändert! Links nach Rechts.
-      if (left < right) {
+      if (left < right || index === -1) {
         this.direction = "right";
         target = this.firstHit[0] + 1;
       }
@@ -53,14 +54,17 @@ export class Ki {
       } else {
         target = this.firstHit[this.firstHit.length - 1] + 1;
       }
+      var index = this.posArray.indexOf(target);
       var left = target.toString()[0];
       var right = (target - 1).toString()[0];
       // Hier wird die Richtung geändert! Rechts nach Links.
-      if(left < right) {
+      if(left < right || index === -1) {
         this.direction = "left";
         target = this.firstHit[0] - 1;
       }
     }
+    var index = this.posArray.indexOf(target);
+    this.posArray.splice(index, 1);
     return target;
   }
 
@@ -80,7 +84,10 @@ export class Ki {
       this.firstHit = data[1];
       scoreboard.updateScoreboard(scoreboardspieler, schiffe.ships);
       if (statusfeld.updateStatus(dataId)) {
-        this.firstHit.push(shotposition);
+        if (this.isRandomTarget ||
+            (!this.isRandomTarget && this.firstHit.length > 0)) {
+          this.firstHit.push(shotposition);
+        }
         this.computershoot(tablespieler, scoreboardspieler);
       } else {
         if (this.isRandomTarget) {
