@@ -32,6 +32,7 @@ export class Ki {
   notrandomTarget() {
     this.isRandomTarget = false;
     var target;
+
     if (this.direction === "left") {
       if (this.directionchange) {
         target = this.firstHit[0] - 1;
@@ -48,6 +49,7 @@ export class Ki {
         target = this.firstHit[0] + 1;
       }
     }
+
     if(this.direction === "right"){
       if (this.directionchange) {
         target = this.firstHit[0] + 1;
@@ -66,6 +68,7 @@ export class Ki {
     }
     var index = this.posArray.indexOf(target);
     this.posArray.splice(index, 1);
+
     return target;
   }
 
@@ -85,16 +88,26 @@ export class Ki {
       schiffe.updateShips(data[0]);
       this.firstHit = data[1];
       scoreboard.updateScoreboard(scoreboardspieler, schiffe.ships);
+      // Wenn der Schuss ein Treffer war...
       if (statusfeld.updateStatus(dataId)) {
+        // ...und der Schuss ein Zufallsschuss oder ein weiterer gezielter Schuss war
         if (this.isRandomTarget ||
             (!this.isRandomTarget && this.firstHit.length > 0)) {
+          // füge die getroffene Position dem firstHit-Array hinzu
           this.firstHit.push(shotposition);
         }
+        // ...schiesst die KI nochmal
         this.computershoot(tablespieler, scoreboardspieler);
+      // Wenn der Schuss ein Fehlschuss war...
       } else {
+        // ...und es ein Zufallsschuss war
         if (this.isRandomTarget) {
+          // vergiss alle getroffenen Felder
           this.firstHit = [];
         }
+        // ...außerdem wechsele die Schussrichtung
+        // und gebe Bescheid, dass ein Richtungswechsel
+        // stattgefunden hat.
         if (this.direction === "right") {
           this.direction ="left";
           this.directionchange = true;
