@@ -1,5 +1,5 @@
 export class Spielfeld {
-  updateData(shotposition, ships) {
+  updateData(shotposition, ships, firstHit = []) {
     ships.map(function(ship) {
         var newpos = ship.position.filter(function(pos) {
             return pos !== shotposition;
@@ -11,9 +11,10 @@ export class Spielfeld {
           return elem;
         }
         var status = document.querySelector(".status h2");
-        status.innerHTML = "Schiff zerstört!"
+        status.innerHTML = "Schiff zerstört!";
+        firstHit = [];
     });
-    return newShips;
+    return [newShips, firstHit];
   }
 
   schiffeerstellen(table,ships) {

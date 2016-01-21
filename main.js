@@ -51,7 +51,8 @@ ready(function() {
       if (dataId < 2){
         td.setAttribute('data-id', dataId + 2);
         spielfeld.render(tablegegner, true);
-        schiffe.updateShipsKi(spielfeld.updateData(shotposition, schiffe.shipsKI));
+        var data = spielfeld.updateData(shotposition, schiffe.shipsKI);
+        schiffe.updateShipsKi(data[0]);
         scoreboard.updateScoreboard(scoreboardgegner, schiffe.shipsKI);
         if (!statusfeld.updateStatus(dataId)) {
           ki.computershoot(tablespieler, scoreboardspieler);
