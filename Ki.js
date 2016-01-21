@@ -10,6 +10,7 @@ var schiffe = new Schiff();
 
 export class Ki {
   constructor() {
+    this.bistdudran = false;
     this.directionchange = false;
     this.isRandomTarget = true;
     this.posArray = [];
@@ -69,6 +70,7 @@ export class Ki {
   }
 
   computershoot(tablespieler, scoreboardspieler) {
+    this.bistdudran = true;
     setTimeout(function() {
       if (this.firstHit.length > 0){
         var shotposition = this.notrandomTarget();
@@ -101,6 +103,7 @@ export class Ki {
           this.directionchange = true;
         }
       }
+      this.bistdudran = false;
     }.bind(this), 500);
   }
 }

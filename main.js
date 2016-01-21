@@ -44,18 +44,20 @@ ready(function() {
   });
 
   tablegegner.addEventListener("click", function() {
-    if(event.target && event.target.nodeName == "TD") {
-      var td = event.target;
-      var dataId = parseInt(td.getAttribute('data-id'));
-      var shotposition = parseInt(td.getAttribute('data-pos'));
-      if (dataId < 2){
-        td.setAttribute('data-id', dataId + 2);
-        spielfeld.render(tablegegner, true);
-        var data = spielfeld.updateData(shotposition, schiffe.shipsKI);
-        schiffe.updateShipsKi(data[0]);
-        scoreboard.updateScoreboard(scoreboardgegner, schiffe.shipsKI);
-        if (!statusfeld.updateStatus(dataId)) {
-          ki.computershoot(tablespieler, scoreboardspieler);
+    if(!ki.bistdudran){
+      if(event.target && event.target.nodeName == "TD") {
+        var td = event.target;
+        var dataId = parseInt(td.getAttribute('data-id'));
+        var shotposition = parseInt(td.getAttribute('data-pos'));
+        if (dataId < 2){
+          td.setAttribute('data-id', dataId + 2);
+          spielfeld.render(tablegegner, true);
+          var data = spielfeld.updateData(shotposition, schiffe.shipsKI);
+          schiffe.updateShipsKi(data[0]);
+          scoreboard.updateScoreboard(scoreboardgegner, schiffe.shipsKI);
+          if (!statusfeld.updateStatus(dataId)) {
+            ki.computershoot(tablespieler, scoreboardspieler);
+          }
         }
       }
     }
