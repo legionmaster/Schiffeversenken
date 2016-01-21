@@ -10,6 +10,7 @@ var schiffe = new Schiff();
 
 export class Ki {
   constructor() {
+    this.directionchange = false;
     this.isRandomTarget = true;
     this.posArray = [];
     this.firstHit = [];
@@ -22,27 +23,39 @@ export class Ki {
   randomTarget() {
     var index = Math.floor(Math.random() * this.posArray.length);
     var target = this.posArray[index];
+    this.isRandomTarget = true;
     this.posArray.splice(index, 1);
     return parseInt(target);
-    this.isRandomTarget = true;
   }
 
   notrandomTarget() {
-
+    this.isRandomTarget = false;
+    var target;
     if (this.direction === "left") {
-      var target = this.firstHit[this.firstHit.length - 1] - 1;
+      if (this.directionchange) {
+        target = this.firstHit[0] - 1;
+        this.directionchange = false;
+      } else {
+        target = this.firstHit[this.firstHit.length - 1] - 1;
+      }
       var left = target.toString()[0];
       var right = (target + 1).toString()[0];
-      this.isRandomTarget = "false";
-      if(left < right) {
+      // Hier wird die Richtung geändert! Links nach Rechts.
+      if (left < right) {
         this.direction = "right";
         target = this.firstHit[0] + 1;
       }
     }
     if(this.direction === "right"){
-      var target = this.firstHit[this.firstHit.length - 1] + 1;
+      if (this.directionchange) {
+        target = this.firstHit[0] + 1;
+        this.directionchange = false;
+      } else {
+        target = this.firstHit[this.firstHit.length - 1] + 1;
+      }
       var left = target.toString()[0];
       var right = (target - 1).toString()[0];
+      // Hier wird die Richtung geändert! Rechts nach Links.
       if(left < right) {
         this.direction = "left";
         target = this.firstHit[0] - 1;
@@ -53,8 +66,8 @@ export class Ki {
 
   computershoot(tablespieler, scoreboardspieler) {
     setTimeout(function() {
-      if(this.firstHit.length > 0){
-      var shotposition = this.notrandomTarget();
+      if (this.firstHit.length > 0){
+        var shotposition = this.notrandomTarget();
       } else {
         var shotposition = this.randomTarget();
       }
@@ -70,13 +83,15 @@ export class Ki {
         this.firstHit.push(shotposition);
         this.computershoot(tablespieler, scoreboardspieler);
       } else {
-        if(this.isRandomTarget === true){
-        this.firstHit = [];
-      }
+        if (this.isRandomTarget) {
+          this.firstHit = [];
+        }
         if (this.direction === "right") {
           this.direction ="left";
+          this.directionchange = true;
         } else {
           this.direction ="right";
+          this.directionchange = true;
         }
       }
     }.bind(this), 500);
