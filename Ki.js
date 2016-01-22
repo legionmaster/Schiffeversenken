@@ -1,15 +1,14 @@
 import {Scoreboard} from './Scoreboard';
 import {Spielfeld} from './Spielfeld';
 import {Statusfeld} from './Statusfeld';
-import {Schiff} from './Schiff';
 
 var scoreboard = new Scoreboard();
 var spielfeld = new Spielfeld();
 var statusfeld = new Statusfeld();
-var schiffe = new Schiff();
 
 export class Ki {
-  constructor() {
+  constructor(spieler) {
+    this.spieler = spieler;
     this.bistdudran = false;
     this.directionchange = false;
     this.isRandomTarget = true;
@@ -79,29 +78,33 @@ export class Ki {
       }
       var td = tablespieler.querySelector('td[data-pos="' + shotposition + '"]');
       var dataId = parseInt(td.getAttribute("data-id"));
-      td.setAttribute('data-id', dataId + 2);
-      spielfeld.render(tablespieler, false);
-      var data = spielfeld.updateData(shotposition, schiffe.ships,this.firstHit);
-      schiffe.updateShips(data[0]);
-      this.firstHit = data[1];
-      scoreboard.updateScoreboard(scoreboardspieler, schiffe.ships);
-      if (statusfeld.updateStatus(dataId)) {
-        if (this.isRandomTarget ||
-            (!this.isRandomTarget && this.firstHit.length > 0)) {
-          this.firstHit.push(shotposition);
-        }
-        this.computershoot(tablespieler, scoreboardspieler);
-      } else {
-        if (this.isRandomTarget) {
-          this.firstHit = [];
-        }
-        if (this.direction === "right") {
-          this.direction ="left";
-          this.directionchange = true;
+      if (dataId < 2) {
+        td.setAttribute('data-id', dataId + 2);
+        spielfeld.render(tablespieler, false);
+        var data = spielfeld.updateData(shotposition, this.spieler.schiffe, this.firstHit);
+        this.spieler.updateSchiffe(data[0]);
+        console.log(this.spieler.schiffe);
+        this.firstHit = data[1];
+        scoreboard.updateScoreboard(scoreboardspieler, this.spieler.schiffe);
+        if (statusfeld.updateStatus(dataId)) {
+          if (this.isRandomTarget || (!this.isRandomTarget && this.firstHit.length > 0)) {
+            this.firstHit.push(shotposition);
+          }
+          this.computershoot(tablespieler, scoreboardspieler);
         } else {
-          this.direction ="right";
-          this.directionchange = true;
+          if (this.isRandomTarget) {
+            this.firstHit = [];
+          }
+          if (this.direction === "right") {
+            this.direction ="left";
+            this.directionchange = true;
+          } else {
+            this.direction ="right";
+            this.directionchange = true;
+          }
         }
+      } else {
+        alert("Das Feld wurde schon beschossen");
       }
       this.bistdudran = false;
     }.bind(this), 500);

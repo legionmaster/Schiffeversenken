@@ -7,7 +7,7 @@ export class Scoreboard {
     var ubootcount = 0
     for (var i = 0; i < ships.length; i++) {
       ships[i]
-      switch (ships[i].name){
+      switch (ships[i].typ){
         case("schlachtschiff"):
           schlachtschiffcount++;
           break;
@@ -17,7 +17,7 @@ export class Scoreboard {
         case("kreuzer"):
           kreuzercount++;
           break;
-        case("u-boot"):
+        case("uboot"):
           ubootcount++;
           break;
         default:
@@ -29,8 +29,8 @@ export class Scoreboard {
     tds[0].querySelector("span").innerHTML= ubootcount;
     var summe = kreuzercount + zerstoerercount + schlachtschiffcount + ubootcount;
     if(summe == 0) {
-      alert("Spiel vorbei!");
-      window.open("http://localhost:8080", "_self");
+      // alert("Spiel vorbei!");
+      // window.open("http://localhost:8080", "_self");
     }
   }
 }

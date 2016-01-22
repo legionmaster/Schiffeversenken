@@ -55,3 +55,8 @@ table {
   top: 250px;
 
 }
+
+#gegner td:hover{
+  opacity: 0.4;
+  cursor: pointer;
+}

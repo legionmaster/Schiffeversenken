@@ -17,7 +17,7 @@ export class Spielfeld {
     return [newShips, firstHit];
   }
 
-  schiffeerstellen(table,ships) {
+  schiffeerstellen(table, ships) {
     var tds = table.getElementsByTagName("td");
     for (var i = 0; i < ships.length; i++) {
       for (var j = 0; j < ships[i].position.length; j++) {
