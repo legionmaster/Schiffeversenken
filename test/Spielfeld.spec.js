@@ -14,7 +14,12 @@ describe('updateData', function() {
     it('should remove the hitposition from the ships data array', () => {
         let shotposition = 17;
         let data = spielfeld.updateData(shotposition, ships);
-        console.log(data[0][0].position.indexOf(17));
         expect(data[0][0].position.indexOf(17)).toEqual(-1);
+    });
+
+    it('should do nothing when hitposition does not exist', function() {
+        let shotposition = 67;
+        let data = spielfeld.updateData(shotposition, ships);
+        expect(data).toEqual(data);
     });
 });
