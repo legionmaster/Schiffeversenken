@@ -51,6 +51,7 @@ ready(function() {
 
   spielfeld.createTable(tablespieler, 10, 10);
   spielfeld.createTable(tablegegner, 10, 10);
+  var tdsSpieler = tablespieler.querySelectorAll("td");
 
   var kiSchiffstyp = ki.gen.next();
   ki.checkPosition(kiSchiffstyp.value[2], kiSchiffstyp.value[0]);
@@ -66,7 +67,7 @@ ready(function() {
   tablespieler.addEventListener("click", function(event) {
     if (!message.done) {
       var position = createPosition(message.value[2], event.target.getAttribute("data-pos"))
-      player.schiffesetzen(new Schiff(message.value[0], message.value[2], position), tablespieler.querySelectorAll("td"));
+      player.schiffesetzen(new Schiff(message.value[0], message.value[2], position), tdsSpieler);
       message = gen.next();
       scoreboard.updateScoreboard(scoreboardspieler, player.schiffe);
       spielfeld.render(tablespieler, false);
@@ -78,6 +79,28 @@ ready(function() {
     } else {
       statusfeld.setStatus("Start!");
       scoreboard.updateScoreboard(scoreboardspieler, player.schiffe);
+    }
+  });
+
+  tablespieler.addEventListener("mouseover", function(event) {
+    var pos = parseInt(event.target.getAttribute("data-pos"));
+    var id = parseInt(event.target.getAttribute("data-id"));
+    if (id === 0) {
+      for (var i = 0; i < message.value[2]; i++) {
+        tdsSpieler[pos + i].classList.add("markiert");
+        tdsSpieler[pos + i].classList.remove("wasser");
+      }
+    }
+  });
+
+  tablespieler.addEventListener("mouseout", function(event){
+    var pos = parseInt(event.target.getAttribute("data-pos"));
+    var id = parseInt(event.target.getAttribute("data-id"));
+    if (id === 0) {
+      for (var i = 0; i < message.value[2]; i++) {
+        tdsSpieler[pos + i].classList.add("wasser");
+        tdsSpieler[pos + i].classList.remove("markiert");
+      }
     }
   });
 

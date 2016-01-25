@@ -6,6 +6,7 @@ export class Spieler{
     this.schiffe.push(schiff);
     for (var j = 0; j < schiff.position.length; j++) {
       tds[schiff.position[j]].setAttribute("data-id", 1);
+      tds[schiff.position[j]].setAttribute("data-batt", (j + 1));      
     }
   }
   updateSchiffe(schiffe) {

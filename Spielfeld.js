@@ -10,8 +10,7 @@ export class Spielfeld {
         if (elem.position.length > 0) {
           return elem;
         }
-        var status = document.querySelector(".status h2");
-        status.innerHTML = "Schiff zerstört!";
+        alert("Schiff zerstört!");
         firstHit = [];
     });
     return [newShips, firstHit];
