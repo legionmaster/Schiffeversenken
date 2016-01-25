@@ -9,7 +9,6 @@ import {Ki} from './Ki';
 var scoreboard = new Scoreboard();
 var spielfeld = new Spielfeld();
 var statusfeld = new Statusfeld();
-var schiffe = new Schiff();
 var player = new Spieler();
 var ki = new Ki(player);
 
@@ -36,16 +35,6 @@ function* schiffeplatzieren() {
   }
 }
 
-function main(args) {
-  spielfeld.schiffeerstellen(args.tablespieler, player.schiffe);
-  spielfeld.schiffeerstellen(args.tablegegner, schiffe.shipsKI);
-  scoreboard.updateScoreboard(args.scoreboardgegner, schiffe.shipsKI);
-  scoreboard.updateScoreboard(args.scoreboardspieler, player.schiffe);
-  spielfeld.render(args.tablespieler, false);
-  spielfeld.render(args.tablegegner, true);
-  // schiffeplatzieren();
-}
-
 function createPosition(length, startPoint) {
   var position = [parseInt(startPoint)];
   for (var i = 1; i < length; i++) {
@@ -63,28 +52,24 @@ ready(function() {
   spielfeld.createTable(tablespieler, 10, 10);
   spielfeld.createTable(tablegegner, 10, 10);
 
-  main({
-    "tablespieler": tablespieler,
-    "tablegegner": tablegegner,
-    "scoreboardgegner": scoreboardgegner,
-    "scoreboardspieler": scoreboardspieler
-  });
+  var kiSchiffstyp = ki.gen.next();
+  ki.checkPosition(kiSchiffstyp.value[2], kiSchiffstyp.value[0]);
+  scoreboard.updateScoreboard(scoreboardgegner, ki.schiffe);
+  spielfeld.render(tablespieler, false);
+  spielfeld.render(tablegegner, true);
 
   var gen = schiffeplatzieren();
   var message = gen.next();
   statusfeld.setStatus(message.value[0] + " setzen!");
 
+  // Mit jedem Klick setzt der Spieler das entsprechende Schiff
   tablespieler.addEventListener("click", function(event) {
     if (!message.done) {
       var position = createPosition(message.value[2], event.target.getAttribute("data-pos"))
-      player.schiffesetzen(new Schiff(message.value[0], message.value[2], position));
+      player.schiffesetzen(new Schiff(message.value[0], message.value[2], position), tablespieler.querySelectorAll("td"));
       message = gen.next();
-      main({
-        "tablespieler": tablespieler,
-        "tablegegner": tablegegner,
-        "scoreboardgegner": scoreboardgegner,
-        "scoreboardspieler": scoreboardspieler
-      });
+      scoreboard.updateScoreboard(scoreboardspieler, player.schiffe);
+      spielfeld.render(tablespieler, false);
       if (typeof message.value !== 'undefined') {
         statusfeld.setStatus(message.value[0] + " setzen!");
       } else {
@@ -92,6 +77,7 @@ ready(function() {
       }
     } else {
       statusfeld.setStatus("Start!");
+      scoreboard.updateScoreboard(scoreboardspieler, player.schiffe);
     }
   });
 
@@ -104,9 +90,9 @@ ready(function() {
         if (dataId < 2){
           td.setAttribute('data-id', dataId + 2);
           spielfeld.render(tablegegner, true);
-          var data = spielfeld.updateData(shotposition, schiffe.shipsKI);
-          schiffe.updateShipsKi(data[0]);
-          scoreboard.updateScoreboard(scoreboardgegner, schiffe.shipsKI);
+          var data = spielfeld.updateData(shotposition, ki.schiffe);
+          ki.updateSchiffe(data[0]);
+          scoreboard.updateScoreboard(scoreboardgegner, ki.schiffe);
           if (!statusfeld.updateStatus(dataId)) {
             ki.computershoot(tablespieler, scoreboardspieler);
           }
