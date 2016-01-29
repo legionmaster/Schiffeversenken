@@ -42,10 +42,39 @@ table {
   background-color: black;
 }
 
+.schiff[data-batt='1'] {
+  background: url(/img/batt1.gif);
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.schiff[data-batt='2'] {
+  background: url(/img/batt2.gif) 0 0;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.schiff[data-batt='3'] {
+  background: url(/img/batt3.gif) 0 0;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.schiff[data-batt='4'] {
+  background: url(/img/batt4.gif) 0 0;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.schiff[data-batt='5'] {
+  background: url(/img/batt5.gif);
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
 .wasser {
   background-color: blue;
   background: url(/img/wasser.jpg) 0 0;
-
 }
 
 .status {
@@ -54,4 +83,14 @@ table {
   left: 300px;
   top: 250px;
 
+}
+
+#gegner td:hover{
+  opacity: 0.4;
+  cursor: pointer;
+}
+
+.markiert {
+  opacity: 0.5;
+  background-color: #00ff00;
 }
