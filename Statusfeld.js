@@ -15,4 +15,9 @@ export class Statusfeld {
       return true;
     }
   }
+
+  setStatus(text){
+    var status = document.querySelector(".status h1");
+    status.innerHTML = text;
+  }
 }
