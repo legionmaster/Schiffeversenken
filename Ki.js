@@ -32,22 +32,32 @@ export class Ki extends Spieler {
     this.counter = 0;
   }
 
+// Platzieren der Schiffe
   *schiffeplatzieren() {
+      // Für jeden Schiffstyp im Array Schiffstypen...
     for (let schiffstyp of this.schiffstypen) {
+      // ...Solange i kleiner als die Anzahl Variable des schiffstyps ist dann i++.
       for (var i = 0; i < schiffstyp[1]; i++) {
+          // Gibt den aktuellen Schiffstyp zurück und pausiert die generator Funktion.
         yield schiffstyp;
       }
     }
   }
 
+  // Erstellt die start Position.
+
   createPosition(length, startPoint) {
+    // Variable mit der Startposition wird deklariert.
     var position = [parseInt(startPoint)];
+    // Variable i wird deklariert und wenn sie kleiner als die länge des schiffes ist i++.
     for (var i = 1; i < length; i++) {
+      // Neues Element wird hinzugefügt.
       position.push(parseInt(startPoint) + i);
     }
+    // returnt die Position
     return position;
   }
-
+// Prüft die Position ob sie legitim ist.
   checkPosition(length, typ) {
     this.counter++;
     var tds = document.querySelectorAll("#gegner table td");
@@ -68,6 +78,7 @@ export class Ki extends Spieler {
         error = true;
       }
     }
+    // Wenn die Schiffe beim 1000 versuch nicht platziert werden konnten wird ein Alert ausgegeben.
     if (this.counter > 1000) {
       alert('Konnte nicht alle Schiffe platzieren. Bitte die Seite neuladen');
       return;
@@ -84,7 +95,7 @@ export class Ki extends Spieler {
       }
     }
   }
-
+// Generiert eine zufällige Schussposition
   randomTarget() {
     var index = Math.floor(Math.random() * this.posArray.length);
     var target = this.posArray[index];
@@ -92,7 +103,7 @@ export class Ki extends Spieler {
     this.posArray.splice(index, 1);
     return parseInt(target);
   }
-
+// Generiert keine zufällige Schussposition.
   notrandomTarget() {
     this.isRandomTarget = false;
     var target;
@@ -132,7 +143,8 @@ export class Ki extends Spieler {
     this.posArray.splice(index, 1);
     return target;
   }
-
+//  Ki schiesst auf ein feld welches sie vorher überprft hatte ob die data id höher als 0 ist, weil wenn die data-id
+//  höher wie 0 ist schießt sie auf ein anderes feld.
   computershoot(tablespieler, scoreboardspieler) {
     this.bistdudran = true;
     setTimeout(function() {
