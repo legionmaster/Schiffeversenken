@@ -15,8 +15,8 @@ export class Ki {
     this.isRandomTarget = true;
     this.posArray = [];
     this.firstHit = [];
-    this.direction = "left";
-    for (var i = 0; i < 100 ; i++) {
+    this.direction = 'left';
+    for (var i = 0; i < 100; i++) {
       this.posArray.push(i);
     }
   }
@@ -26,14 +26,14 @@ export class Ki {
     var target = this.posArray[index];
     this.isRandomTarget = true;
     this.posArray.splice(index, 1);
-    return parseInt(target);
+    return parseInt(target, 10);
   }
 
   notrandomTarget() {
     this.isRandomTarget = false;
     var target;
 
-    if (this.direction === "left") {
+    if (this.direction === 'left') {
       if (this.directionchange) {
         target = this.firstHit[0] - 1;
         this.directionchange = false;
@@ -45,12 +45,12 @@ export class Ki {
       var right = (target + 1).toString()[0];
       // Hier wird die Richtung geändert! Links nach Rechts.
       if (left < right || index === -1) {
-        this.direction = "right";
+        this.direction = 'right';
         target = this.firstHit[0] + 1;
       }
     }
 
-    if(this.direction === "right"){
+    if (this.direction === 'right') {
       if (this.directionchange) {
         target = this.firstHit[0] + 1;
         this.directionchange = false;
@@ -61,8 +61,8 @@ export class Ki {
       var left = target.toString()[0];
       var right = (target - 1).toString()[0];
       // Hier wird die Richtung geändert! Rechts nach Links.
-      if(left < right || index === -1) {
-        this.direction = "left";
+      if (left < right || index === -1) {
+        this.direction = 'left';
         target = this.firstHit[0] - 1;
       }
     }
@@ -75,16 +75,16 @@ export class Ki {
   computershoot(tablespieler, scoreboardspieler) {
     this.bistdudran = true;
     setTimeout(function() {
-      if (this.firstHit.length > 0){
-        var shotposition = this.notrandomTarget();
-      } else {
-        var shotposition = this.randomTarget();
+      var shotposition = this.randomTarget();
+      if (this.firstHit.length > 0) {
+        shotposition = this.notrandomTarget();
       }
+
       var td = tablespieler.querySelector('td[data-pos="' + shotposition + '"]');
-      var dataId = parseInt(td.getAttribute("data-id"));
+      var dataId = parseInt(td.getAttribute('data-id'), 10);
       td.setAttribute('data-id', dataId + 2);
       spielfeld.render(tablespieler, false);
-      var data = spielfeld.updateData(shotposition, schiffe.ships,this.firstHit);
+      var data = spielfeld.updateData(shotposition, schiffe.ships, this.firstHit);
       schiffe.updateShips(data[0]);
       this.firstHit = data[1];
       scoreboard.updateScoreboard(scoreboardspieler, schiffe.ships);
@@ -108,11 +108,11 @@ export class Ki {
         // ...außerdem wechsele die Schussrichtung
         // und gebe Bescheid, dass ein Richtungswechsel
         // stattgefunden hat.
-        if (this.direction === "right") {
-          this.direction ="left";
+        if (this.direction === 'right') {
+          this.direction = 'left';
           this.directionchange = true;
         } else {
-          this.direction ="right";
+          this.direction = 'right';
           this.directionchange = true;
         }
       }

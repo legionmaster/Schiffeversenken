@@ -12,7 +12,7 @@ var schiffe = new Schiff();
 
 
 function ready(fn) {
-  if (document.readyState != 'loading') {
+  if (document.readyState !== 'loading') {
     fn();
   } else {
     document.addEventListener('DOMContentLoaded', fn);
@@ -31,25 +31,25 @@ function main(args) {
 }
 
 ready(function() {
-  var tablespieler = document.querySelector("#spieler table");
-  var tablegegner = document.querySelector("#gegner table");
-  var scoreboardgegner = document.querySelector("#gegner .scoreboard table");
-  var scoreboardspieler = document.querySelector("#spieler .scoreboard table");
+  var tablespieler = document.querySelector('#spieler table');
+  var tablegegner = document.querySelector('#gegner table');
+  var scoreboardgegner = document.querySelector('#gegner .scoreboard table');
+  var scoreboardspieler = document.querySelector('#spieler .scoreboard table');
 
   main({
-    "tablespieler": tablespieler,
-    "tablegegner": tablegegner,
-    "scoreboardgegner": scoreboardgegner,
-    "scoreboardspieler": scoreboardspieler
+    'tablespieler': tablespieler,
+    'tablegegner': tablegegner,
+    'scoreboardgegner': scoreboardgegner,
+    'scoreboardspieler': scoreboardspieler
   });
 
-  tablegegner.addEventListener("click", function() {
-    if(!ki.bistdudran){
-      if(event.target && event.target.nodeName == "TD") {
+  tablegegner.addEventListener('click', function() {
+    if (!ki.bistdudran) {
+      if (event.target && event.target.nodeName === 'TD') {
         var td = event.target;
-        var dataId = parseInt(td.getAttribute('data-id'));
-        var shotposition = parseInt(td.getAttribute('data-pos'));
-        if (dataId < 2){
+        var dataId = parseInt(td.getAttribute('data-id'), 10);
+        var shotposition = parseInt(td.getAttribute('data-pos'), 10);
+        if (dataId < 2) {
           td.setAttribute('data-id', dataId + 2);
           spielfeld.render(tablegegner, true);
           var data = spielfeld.updateData(shotposition, schiffe.shipsKI);

@@ -1,17 +1,16 @@
 export class Statusfeld {
-  updateStatus (dataId) {
-    if (dataId + 2 == 2){
-      var status = document.querySelector(".status h1");
-      status.innerHTML = "Daneben!";
-      status = document.querySelector(".status h2");
-      status.innerHTML = "Nächster Spieler ist an der Reihe!"
+  updateStatus(dataId) {
+    var status = document.querySelector('.status h1');
+    if (dataId + 2 === 2) {
+      status.innerHTML = 'Daneben!';
+      status = document.querySelector('.status h2');
+      status.innerHTML = 'Nächster Spieler ist an der Reihe!';
       return false;
     }
-    if (dataId + 2 == 3){
-      var status = document.querySelector(".status h1");
-      status.innerHTML = "Getroffen!";
-      status = document.querySelector(".status h2");
-      status.innerHTML = "Du bist wieder an der Reihe!"
+    if (dataId + 2 === 3) {
+      status.innerHTML = 'Getroffen!';
+      status = document.querySelector('.status h2');
+      status.innerHTML = 'Du bist wieder an der Reihe!';
       return true;
     }
   }
