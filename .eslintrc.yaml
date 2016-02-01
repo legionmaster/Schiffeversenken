@@ -25,7 +25,7 @@ rules:
   key-spacing: [2, { beforeColon: false, afterColon: true }]
   new-cap: 2
   new-parens: 2
-  no-alert: 2
+  no-alert: 0
   no-array-constructor: 2
   no-caller: 2
   no-console: 0
