@@ -18,8 +18,8 @@ export class Ki extends Spieler {
     this.isRandomTarget = true;
     this.posArray = [];
     this.firstHit = [];
-    this.direction = "left";
-    for (var i = 0; i < 100 ; i++) {
+    this.direction = 'left';
+    for (var i = 0; i < 100; i++) {
       this.posArray.push(i);
     }
     this.schiffstypen = [
@@ -101,46 +101,52 @@ export class Ki extends Spieler {
     var target = this.posArray[index];
     this.isRandomTarget = true;
     this.posArray.splice(index, 1);
-    return parseInt(target);
+    return parseInt(target, 10);
   }
 // Generiert keine zufällige Schussposition.
   notrandomTarget() {
     this.isRandomTarget = false;
-    var target;
-    if (this.direction === "left") {
+    let target;
+    let index;
+    let left;
+    let right;
+
+    if (this.direction === 'left') {
+      target = this.firstHit[this.firstHit.length - 1] - 1;
       if (this.directionchange) {
         target = this.firstHit[0] - 1;
         this.directionchange = false;
-      } else {
-        target = this.firstHit[this.firstHit.length - 1] - 1;
       }
-      var index = this.posArray.indexOf(target);
-      var left = target.toString()[0];
-      var right = (target + 1).toString()[0];
+
+      index = this.posArray.indexOf(target);
+      left = target.toString()[0];
+      right = (target + 1).toString()[0];
       // Hier wird die Richtung geändert! Links nach Rechts.
       if (left < right || index === -1) {
-        this.direction = "right";
+        this.direction = 'right';
         target = this.firstHit[0] + 1;
       }
     }
-    if(this.direction === "right"){
+
+    if (this.direction === 'right') {
+      target = this.firstHit[this.firstHit.length - 1] + 1;
       if (this.directionchange) {
         target = this.firstHit[0] + 1;
         this.directionchange = false;
-      } else {
-        target = this.firstHit[this.firstHit.length - 1] + 1;
       }
-      var index = this.posArray.indexOf(target);
-      var left = target.toString()[0];
-      var right = (target - 1).toString()[0];
+
+      index = this.posArray.indexOf(target);
+      left = target.toString()[0];
+      right = (target - 1).toString()[0];
       // Hier wird die Richtung geändert! Rechts nach Links.
-      if(left < right || index === -1) {
-        this.direction = "left";
+      if (left < right || index === -1) {
+        this.direction = 'left';
         target = this.firstHit[0] - 1;
       }
     }
-    var index = this.posArray.indexOf(target);
+    index = this.posArray.indexOf(target);
     this.posArray.splice(index, 1);
+
     return target;
   }
 //  Ki schiesst auf ein feld welches sie vorher überprft hatte ob die data id höher als 0 ist, weil wenn die data-id
@@ -148,13 +154,13 @@ export class Ki extends Spieler {
   computershoot(tablespieler, scoreboardspieler) {
     this.bistdudran = true;
     setTimeout(function() {
-      if (this.firstHit.length > 0){
-        var shotposition = this.notrandomTarget();
-      } else {
-        var shotposition = this.randomTarget();
+      var shotposition = this.randomTarget();
+      if (this.firstHit.length > 0) {
+        shotposition = this.notrandomTarget();
       }
+
       var td = tablespieler.querySelector('td[data-pos="' + shotposition + '"]');
-      var dataId = parseInt(td.getAttribute("data-id"));
+      var dataId = parseInt(td.getAttribute("data-id"), 10);
       if (dataId < 2) {
         td.setAttribute('data-id', dataId + 2);
         spielfeld.render(tablespieler, false);
@@ -162,15 +168,26 @@ export class Ki extends Spieler {
         this.player.updateSchiffe(data[0]);
         this.firstHit = data[1];
         scoreboard.updateScoreboard(scoreboardspieler, this.player.schiffe);
+        // Wenn der Schuss ein Treffer war...
         if (statusfeld.updateStatus(dataId)) {
-          if (this.isRandomTarget || (!this.isRandomTarget && this.firstHit.length > 0)) {
+          // ...und der Schuss ein Zufallsschuss oder ein weiterer gezielter Schuss war
+          if (this.isRandomTarget ||
+              (!this.isRandomTarget && this.firstHit.length > 0)) {
+            // füge die getroffene Position dem firstHit-Array hinzu
             this.firstHit.push(shotposition);
           }
+          // ...schiesst die KI nochmal
           this.computershoot(tablespieler, scoreboardspieler);
+          // Wenn der Schuss ein Fehlschuss war...
         } else {
+          // ...und es ein Zufallsschuss war
           if (this.isRandomTarget) {
+            // vergiss alle getroffenen Felder
             this.firstHit = [];
           }
+          // ...außerdem wechsele die Schussrichtung
+          // und gebe Bescheid, dass ein Richtungswechsel
+          // stattgefunden hat.
           if (this.direction === "right") {
             this.direction ="left";
             this.directionchange = true;

@@ -13,7 +13,7 @@ var player = new Spieler();
 var ki = new Ki(player);
 // Sorgt dafür dass das javascript erst ausgefüghrt wird wenn das gesamte HTML Dokument geladen ist.
 function ready(fn) {
-  if (document.readyState != 'loading') {
+  if (document.readyState !== 'loading') {
     fn();
   } else {
     document.addEventListener('DOMContentLoaded', fn);
