@@ -1,4 +1,4 @@
-import "babel-polyfill";
+import 'babel-polyfill';
 import {Scoreboard} from './Scoreboard';
 import {Spielfeld} from './Spielfeld';
 import {Statusfeld} from './Statusfeld';
@@ -23,18 +23,18 @@ export class Ki extends Spieler {
       this.posArray.push(i);
     }
     this.schiffstypen = [
-      ["schlachtschiff", 1, 5],
-      ["kreuzer", 2, 4],
-      ["zerstörer", 3, 3],
-      ["uboot", 4, 2]
+      ['schlachtschiff', 1, 5],
+      ['kreuzer', 2, 4],
+      ['zerstörer', 3, 3],
+      ['uboot', 4, 2]
     ];
     this.gen = this.schiffeplatzieren();
     this.counter = 0;
   }
 
-// Platzieren der Schiffe
+  // Platzieren der Schiffe
   *schiffeplatzieren() {
-      // Für jeden Schiffstyp im Array Schiffstypen...
+    // Für jeden Schiffstyp im Array Schiffstypen...
     for (let schiffstyp of this.schiffstypen) {
       // ...Solange i kleiner als die Anzahl Variable des schiffstyps ist dann i++.
       for (var i = 0; i < schiffstyp[1]; i++) {
@@ -43,24 +43,42 @@ export class Ki extends Spieler {
       }
     }
   }
-
-  // Erstellt die start Position.
-
+  /**
+   * { function_description }
+   *
+   * @method createPosition
+   * @param  {number} length     Die Länge des Schiffs
+   * @param  {String} startPoint Der Index der Startposition
+   * @return {Array}  Die berechneten Positionen des Schiffs, in Abhängigkeit
+   *                  zur Startposition und Länge
+   */
   createPosition(length, startPoint) {
-    // Variable mit der Startposition wird deklariert.
-    var position = [parseInt(startPoint)];
-    // Variable i wird deklariert und wenn sie kleiner als die länge des schiffes ist i++.
+    /**
+     * Startposition
+     *
+     * @type   {Array}
+     */
+    var position = [parseInt(startPoint, 10)];
+    // Variable i wird deklariert und wenn sie kleiner als die länge des
+    // schiffes ist i++.
     for (var i = 1; i < length; i++) {
       // Neues Element wird hinzugefügt.
-      position.push(parseInt(startPoint) + i);
+      position.push(parseInt(startPoint, 10) + i);
     }
-    // returnt die Position
+
     return position;
   }
-// Prüft die Position ob sie legitim ist.
+
+  /**
+   * Prüft ob die Positionen valide sind.
+   *
+   * @method checkPosition
+   * @param  {number} length Die Länge des Schiffs
+   * @param  {String} typ    Schiffstypbezeichnung
+   */
   checkPosition(length, typ) {
     this.counter++;
-    var tds = document.querySelectorAll("#gegner table td");
+    var tds = document.querySelectorAll('#gegner table td');
     var startPosition = Math.floor(Math.random() * 100);
     var lastPosition = startPosition + length - 1;
     var error = true;
@@ -69,12 +87,12 @@ export class Ki extends Spieler {
     var lengthfirst = startPosition.toString().length;
     var lengthlast = lastPosition.toString().length;
 
-    if (lengthfirst === lengthlast && first===last) {
+    if (lengthfirst === lengthlast && first === last) {
       error = false;
-      if (tds[startPosition].getAttribute("data-id") === "1") {
+      if (tds[startPosition].getAttribute('data-id') === '1') {
         error = true;
       }
-      if (tds[lastPosition].getAttribute("data-id") === "1") {
+      if (tds[lastPosition].getAttribute('data-id') === '1') {
         error = true;
       }
     }
@@ -160,7 +178,7 @@ export class Ki extends Spieler {
       }
 
       var td = tablespieler.querySelector('td[data-pos="' + shotposition + '"]');
-      var dataId = parseInt(td.getAttribute("data-id"), 10);
+      var dataId = parseInt(td.getAttribute('data-id'), 10);
       if (dataId < 2) {
         td.setAttribute('data-id', dataId + 2);
         spielfeld.render(tablespieler, false);
@@ -188,16 +206,16 @@ export class Ki extends Spieler {
           // ...außerdem wechsele die Schussrichtung
           // und gebe Bescheid, dass ein Richtungswechsel
           // stattgefunden hat.
-          if (this.direction === "right") {
-            this.direction ="left";
+          if (this.direction === 'right') {
+            this.direction = 'left';
             this.directionchange = true;
           } else {
-            this.direction ="right";
+            this.direction = 'right';
             this.directionchange = true;
           }
         }
       } else {
-        alert("Das Feld wurde schon beschossen");
+        alert('Das Feld wurde schon beschossen');
       }
       this.bistdudran = false;
     }.bind(this), 500);

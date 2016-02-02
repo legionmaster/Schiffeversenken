@@ -1,4 +1,4 @@
-import "babel-polyfill";
+import 'babel-polyfill';
 import {Scoreboard} from './Scoreboard';
 import {Spielfeld} from './Spielfeld';
 import {Statusfeld} from './Statusfeld';
@@ -28,14 +28,15 @@ function ready(fn) {
  * @type {Array}
  */
 var schiffstypen = [
-  ["schlachtschiff", 1, 5],
-  ["kreuzer", 2, 4],
-  ["zerstörer", 3, 3],
-  ["uboot", 4, 2]
+  ['schlachtschiff', 1, 5],
+  ['kreuzer', 2, 4],
+  ['zerstörer', 3, 3],
+  ['uboot', 4, 2]
 ];
+
 /**
  * Eine Generator-Funktion, die einen Schiffstypen zurückgibt
- * @return {Array} ein Done-Flag und ein Schiffstyp. Achtung yield, kein return
+ * @yield {Array} ein Done-Flag und ein Schiffstyp. Achtung yield, kein return
  */
 function* schiffeplatzieren() {
   // Für jeden Schiffstyp im Array Schiffstypen...
@@ -56,26 +57,26 @@ function* schiffeplatzieren() {
  */
 function createPosition(length, startPoint) {
   // Variable mit der Startposition wird deklariert.
-  var position = [parseInt(startPoint)];
+  var position = [parseInt(startPoint, 10)];
   // Variable i wird deklariert und wenn sie kleiner als die länge des schiffes ist i++.
   for (var i = 1; i < length; i++) {
     // Neues Element wird hinzugefügt.
-    position.push(parseInt(startPoint) + i);
+    position.push(parseInt(startPoint, 10) + i);
   }
   // Die position wird returnt.
   return position;
 }
 // Bekommt die ersten Elemente der Klassen.
-ready(function() {
-  var tablespieler = document.querySelector("#spieler table");
-  var tablegegner = document.querySelector("#gegner table");
-  var scoreboardgegner = document.querySelector("#gegner .scoreboard table");
-  var scoreboardspieler = document.querySelector("#spieler .scoreboard table");
+ready(() => {
+  var tablespieler = document.querySelector('#spieler table');
+  var tablegegner = document.querySelector('#gegner table');
+  var scoreboardgegner = document.querySelector('#gegner .scoreboard table');
+  var scoreboardspieler = document.querySelector('#spieler .scoreboard table');
   // Speilfeld für Gegner und Spieler wird erstellt.
   spielfeld.createTable(tablespieler, 10, 10);
   spielfeld.createTable(tablegegner, 10, 10);
   // tdsSpieler Variable wird deklariert und bekommt das erste Elemnt von der td Klasse.
-  var tdsSpieler = tablespieler.querySelectorAll("td");
+  var tdsSpieler = tablespieler.querySelectorAll('td');
 // kiSchiffstyp Variable wird deklariert.
   var kiSchiffstyp = ki.gen.next();
   // Die Position wird geprüft.
@@ -89,13 +90,13 @@ ready(function() {
   var gen = schiffeplatzieren();
   // Variable enthält A
   var message = gen.next();
-  statusfeld.setStatus(message.value[0] + " setzen!");
+  statusfeld.setStatus(message.value[0] + ' setzen!');
 
   // Mit jedem Klick setzt der Spieler das entsprechende Schiff
-  tablespieler.addEventListener("click", function(event) {
+  tablespieler.addEventListener('click', (event) => {
     if (!message.done) {
       // Die Variable position wird deklariert und bekommt die Value des Klassen Attributes von data-pos.
-      var position = createPosition(message.value[2], event.target.getAttribute("data-pos"))
+      var position = createPosition(message.value[2], event.target.getAttribute('data-pos'));
       player.schiffesetzen(new Schiff(message.value[0], message.value[2], position), tdsSpieler);
       message = gen.next();
       // Scoreboard wird geupdated.
@@ -105,48 +106,48 @@ ready(function() {
       // Wenn nicht gesetzt wurde...
       if (typeof message.value !== 'undefined') {
         // ...Soll im Statusfeld setzen stehen.
-        statusfeld.setStatus(message.value[0] + " setzen!");
+        statusfeld.setStatus(message.value[0] + ' setzen!');
         // Wenn nicht soll Start im Statusfeld stehen.
       } else {
-        statusfeld.setStatus("Start!");
+        statusfeld.setStatus('Start!');
       }
     } else {
-      statusfeld.setStatus("Start!");
+      statusfeld.setStatus('Start!');
       scoreboard.updateScoreboard(scoreboardspieler, player.schiffe);
     }
   });
 //  Mouseover Funktion wird erstellt.
-  tablespieler.addEventListener("mouseover", function(event) {
-    var pos = parseInt(event.target.getAttribute("data-pos"));
-    var id = parseInt(event.target.getAttribute("data-id"));
+  tablespieler.addEventListener('mouseover', (event) => {
+    var pos = parseInt(event.target.getAttribute('data-pos'), 10);
+    var id = parseInt(event.target.getAttribute('data-id'), 10);
     if (id === 0) {
       for (var i = 0; i < message.value[2]; i++) {
         // Wenn man mit der Muas über einem Fled ist kommt die Klasse markiert ins Spiel.
-        tdsSpieler[pos + i].classList.add("markiert");
-        tdsSpieler[pos + i].classList.remove("wasser");
+        tdsSpieler[pos + i].classList.add('markiert');
+        tdsSpieler[pos + i].classList.remove('wasser');
       }
     }
   });
 // Mouseout Funktion wird erstellt.
-  tablespieler.addEventListener("mouseout", function(event){
-    var pos = parseInt(event.target.getAttribute("data-pos"));
-    var id = parseInt(event.target.getAttribute("data-id"));
+  tablespieler.addEventListener('mouseout', (event) => {
+    var pos = parseInt(event.target.getAttribute('data-pos'), 10);
+    var id = parseInt(event.target.getAttribute('data-id'), 10);
     if (id === 0) {
       for (var i = 0; i < message.value[2]; i++) {
         // Wenn man von dem Wasserfeld weg ist soll es nicht mehr markiert sein.
-        tdsSpieler[pos + i].classList.add("wasser");
-        tdsSpieler[pos + i].classList.remove("markiert");
+        tdsSpieler[pos + i].classList.add('wasser');
+        tdsSpieler[pos + i].classList.remove('markiert');
       }
     }
   });
 // Wenn geklickt wird und kein Schiff getroffen wird ist der andere dran.
-  tablegegner.addEventListener("click", function() {
-    if(!ki.bistdudran){
-      if(event.target && event.target.nodeName == "TD") {
+  tablegegner.addEventListener('click', () => {
+    if (!ki.bistdudran) {
+      if (event.target && event.target.nodeName === 'TD') {
         var td = event.target;
-        var dataId = parseInt(td.getAttribute('data-id'));
-        var shotposition = parseInt(td.getAttribute('data-pos'));
-        if (dataId < 2){
+        var dataId = parseInt(td.getAttribute('data-id'), 10);
+        var shotposition = parseInt(td.getAttribute('data-pos'), 10);
+        if (dataId < 2) {
           // Wo man hin geschossen hat erhöht sich die Data-id +2.
           td.setAttribute('data-id', dataId + 2);
           // Spielfeld wird neu gerendert bei jedem klick.
